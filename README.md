@@ -1,4 +1,4 @@
-# Modern Data Stack (MDS) && Marketing
+# ETL && Modern Data Stack (MDS)
 
 <h1 align="center">
   <a

@@ -173,5 +173,6 @@ your-first-project
 
 /sqldb
 /mage/mage_data/modern-data-stack/.operation_history
+/mage/modern-data-stack/.ssh_tunnel
 /mage/mage_data/pipelines/mds_facebook/.variables
 .logs
