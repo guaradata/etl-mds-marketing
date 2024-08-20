@@ -1,0 +1,55 @@
+version: "3"
+services:
+  nginx:
+    container_name: nginx
+    image: nginx:latest
+    build:
+      context: ./nginx
+      dockerfile: Dockerfile
+    ports:
+      - "6789:80"
+      - "80:80"
+    volumes:
+      - ./nginx/config/nginx:/etc/nginx
+      - ./nginx/share/index.html:/usr/share/nginx/html/index.html
+    restart: on-failure:5
+    networks:
+      modern-data-stack:
+        ipv4_address: 189.168.0.2
+  mage:
+    image: mageai/mageai:latest
+    command: mage start ${PROJECT_NAME}
+    env_file:
+      - .env
+    build:
+      context: ./mage
+      dockerfile: Dockerfile
+    environment:
+      USER_CODE_PATH: /home/src/${PROJECT_NAME}
+      ENV: ${ENV}
+    volumes:
+      - ./mage/:/home/src/
+    restart: on-failure:5
+    networks:
+      modern-data-stack:
+        ipv4_address: 189.168.0.3
+  postgres:
+    image: postgres:16.2-alpine
+    container_name: postgres
+    environment:
+      - POSTGRES_DB=${POSTGRES_DB}
+      - POSTGRES_USER=${POSTGRES_USER}
+      - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    volumes:
+      - ./sqldb/postgres:/var/lib/postgresql/data
+    ports:
+      - 5432:5432
+    restart: always
+    networks:
+      modern-data-stack:
+        ipv4_address: 189.168.0.4
+networks:
+  modern-data-stack:
+    ipam:
+      config:
+        - subnet: 189.168.0.0/28

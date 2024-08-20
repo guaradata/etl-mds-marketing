@@ -1,0 +1,122 @@
+blocks:
+- all_upstream_blocks_executed: true
+  color: null
+  configuration:
+    data_provider: postgres
+    data_provider_profile: default
+    dbt: {}
+    disable_query_preprocessing: false
+    export_write_policy: append
+    limit: 1000
+    use_raw_sql: false
+  downstream_blocks:
+  - load_facebook_ads_data
+  executor_config: null
+  executor_type: local_python
+  has_callback: false
+  language: sql
+  name: conn_postgres
+  retry_config: null
+  status: executed
+  timeout: null
+  type: data_loader
+  upstream_blocks: []
+  uuid: conn_postgres
+- all_upstream_blocks_executed: true
+  color: null
+  configuration:
+    data_provider: postgres
+    data_provider_profile: default
+    dbt: {}
+    disable_query_preprocessing: false
+    export_write_policy: append
+    file_source:
+      path: data_loaders/load_facebook_ads_data.sql
+    limit: 1000
+    use_raw_sql: true
+  downstream_blocks:
+  - export_facebook_ads_data
+  executor_config: null
+  executor_type: local_python
+  has_callback: false
+  language: sql
+  name: load_facebook_ads_data
+  retry_config: null
+  status: executed
+  timeout: null
+  type: data_loader
+  upstream_blocks:
+  - conn_postgres
+  uuid: load_facebook_ads_data
+- all_upstream_blocks_executed: true
+  color: null
+  configuration:
+    data_provider: postgres
+    data_provider_profile: default
+    data_provider_table: gold_facebook_ads_data
+    dbt: {}
+    disable_query_preprocessing: false
+    export_write_policy: replace
+    limit: 1000
+    use_raw_sql: false
+  downstream_blocks:
+  - gold_facebook_ads_table
+  executor_config: null
+  executor_type: local_python
+  has_callback: false
+  language: sql
+  name: export_facebook_ads_data
+  retry_config: null
+  status: executed
+  timeout: null
+  type: data_exporter
+  upstream_blocks:
+  - load_facebook_ads_data
+  uuid: export_facebook_ads_data
+- all_upstream_blocks_executed: true
+  color: blue
+  configuration:
+    data_provider: postgres
+    data_provider_profile: default
+    dbt: {}
+    disable_query_preprocessing: false
+    export_write_policy: replace
+    limit: 1000
+    use_raw_sql: true
+  downstream_blocks: []
+  executor_config: null
+  executor_type: local_python
+  has_callback: false
+  language: sql
+  name: gold_facebook_ads_table
+  retry_config: null
+  status: updated
+  timeout: null
+  type: custom
+  upstream_blocks:
+  - export_facebook_ads_data
+  uuid: gold_facebook_ads_table
+cache_block_output_in_memory: false
+callbacks: []
+concurrency_config: {}
+conditionals: []
+created_at: '2024-08-09 19:24:01.086807+00:00'
+data_integration: null
+description: null
+executor_config: {}
+executor_count: 1
+executor_type: null
+extensions: {}
+name: mds-facebook
+notification_config: {}
+remote_variables_dir: null
+retry_config: {}
+run_pipeline_in_one_process: false
+settings:
+  triggers: null
+spark_config: {}
+tags: []
+type: python
+uuid: mds_facebook
+variables_dir: /home/src/mage_data/modern-data-stack
+widgets: []
